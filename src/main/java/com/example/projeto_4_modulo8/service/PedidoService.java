@@ -7,6 +7,9 @@ import com.example.projeto_4_modulo8.repository.PedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -16,6 +19,8 @@ public class PedidoService {
     private PedidoRepository pedidoRepository;
 
     public Long savePedido(Pedido pedido) {
+        pedido.setDataPedido(Date.from(Instant.now()));
+        pedido.setStatusEnum(StatusEnum.ABERTO);
         Pedido pedidoSalvo = pedidoRepository.save(pedido);
         return pedidoSalvo.getId();
     }

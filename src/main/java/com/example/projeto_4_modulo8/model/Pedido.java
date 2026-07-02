@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @Table
@@ -21,17 +22,11 @@ public class Pedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String nome;
-    private String descricao;
-    private Double preco;
-    private Integer quantidadeEstoque;
-    private Boolean ativo;
-
     @ManyToOne
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
 
-    private LocalDate dataPedido;
+    private Date dataPedido;
     private StatusEnum statusEnum;
     private Double valorTotal;
 }

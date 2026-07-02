@@ -4,7 +4,6 @@ import com.example.projeto_4_modulo8.model.Cliente;
 import com.example.projeto_4_modulo8.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.List;
 
@@ -15,6 +14,7 @@ public class ClienteService {
     private ClienteRepository clienteRepository;
 
     public Long saveCliente(Cliente cliente) {
+        cliente.setAtivo(Boolean.TRUE);
         Cliente clienteSalvo = clienteRepository.save(cliente);
         return clienteSalvo.getId();
     }

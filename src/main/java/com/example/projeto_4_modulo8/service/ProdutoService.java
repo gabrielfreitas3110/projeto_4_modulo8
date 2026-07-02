@@ -15,6 +15,7 @@ public class ProdutoService {
     private ProdutoRepository produtoRepository;
 
     public Long saveProduto(Produto produto) {
+        produto.setAtivo(Boolean.TRUE);
         Produto produtoSalvo = produtoRepository.save(produto);
         return produtoSalvo.getId();
     }

@@ -1,7 +1,10 @@
 package com.example.projeto_4_modulo8.controller;
 
 import com.example.projeto_4_modulo8.model.Cliente;
+import com.example.projeto_4_modulo8.model.dto.ClienteRequestDTO;
+import com.example.projeto_4_modulo8.model.dto.ClienteResponseDTO;
 import com.example.projeto_4_modulo8.service.ClienteService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +20,7 @@ public class ClienteController {
     private ClienteService clienteService;
 
     @PostMapping
-    public ResponseEntity<?> cadastrarCliente(@RequestBody Cliente cliente) {
+    public ResponseEntity<?> cadastrarCliente(@RequestBody @Valid ClienteRequestDTO cliente) {
         Long id = clienteService.saveCliente(cliente);
 
         URI location = URI.create("/cliente/" + id);
@@ -27,21 +30,21 @@ public class ClienteController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Cliente>>  buscarTodos() {
-        List<Cliente> clientes = clienteService.findAllClientes();
+    public ResponseEntity<List<ClienteResponseDTO>>  buscarTodos() {
+        List<ClienteResponseDTO> clientes = clienteService.findAllClientes();
 
         return ResponseEntity.ok(clientes);
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Cliente>  buscarPorId(@PathVariable Long id) {
-        Cliente cliente = clienteService.findCliente(id);
+    public ResponseEntity<ClienteResponseDTO>  buscarPorId(@PathVariable Long id) {
+        ClienteResponseDTO cliente = clienteService.findClienteResponse(id);
 
         return ResponseEntity.ok(cliente);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<?>  atualizarCliente(@PathVariable Long id, @RequestBody Cliente cliente) {
+    public ResponseEntity<?>  atualizarCliente(@PathVariable Long id, @RequestBody @Valid ClienteRequestDTO cliente) {
         clienteService.updateCliente(id, cliente);
 
         return ResponseEntity.noContent().build();

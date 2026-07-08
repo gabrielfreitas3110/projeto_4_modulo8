@@ -1,6 +1,8 @@
 package com.example.projeto_4_modulo8.service;
 
 import com.example.projeto_4_modulo8.model.Cliente;
+import com.example.projeto_4_modulo8.model.dto.ClienteRequestDTO;
+import com.example.projeto_4_modulo8.model.dto.ClienteResponseDTO;
 import com.example.projeto_4_modulo8.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,14 +15,25 @@ public class ClienteService {
     @Autowired
     private ClienteRepository clienteRepository;
 
-    public Long saveCliente(Cliente cliente) {
+    public Long saveCliente(ClienteRequestDTO clienteRequest) {
+        Cliente cliente = new Cliente(clienteRequest);
         cliente.setAtivo(Boolean.TRUE);
         Cliente clienteSalvo = clienteRepository.save(cliente);
         return clienteSalvo.getId();
     }
 
-    public List<Cliente> findAllClientes() {
-        return clienteRepository.findAll();
+    public List<ClienteResponseDTO> findAllClientes() {
+        List<Cliente> clientes = clienteRepository.findAll();
+
+        List<ClienteResponseDTO> clientResponseList = clientes.stream().map(ClienteResponseDTO::new).toList();
+
+        return clientResponseList;
+    }
+
+    public ClienteResponseDTO findClienteResponse(Long id) {
+        Cliente cliente = findCliente(id);
+        ClienteResponseDTO clienteResponseDTO = new ClienteResponseDTO(cliente);
+        return clienteResponseDTO;
     }
 
     public Cliente findCliente(Long id) {
@@ -28,10 +41,9 @@ public class ClienteService {
         return cliente;
     }
 
-    public void updateCliente(Long id, Cliente cliente) {
+    public void updateCliente(Long id, ClienteRequestDTO cliente) {
         Cliente clienteBase = findCliente(id);
 
-        clienteBase.setAtivo(cliente.getAtivo());
         clienteBase.setEmail(cliente.getEmail());
         clienteBase.setNome(cliente.getNome());
         clienteBase.setTelefone(cliente.getTelefone());

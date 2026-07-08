@@ -1,5 +1,6 @@
 package com.example.projeto_4_modulo8.model;
 
+import com.example.projeto_4_modulo8.model.dto.ClienteRequestDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,4 +24,9 @@ public class Cliente {
     private String email;
     private Boolean ativo;
 
+    public Cliente(ClienteRequestDTO clienteRequest) {
+        this.nome = clienteRequest.getNome();
+        this.telefone = clienteRequest.getTelefone();
+        this.email = clienteRequest.getEmail();
+    }
 }

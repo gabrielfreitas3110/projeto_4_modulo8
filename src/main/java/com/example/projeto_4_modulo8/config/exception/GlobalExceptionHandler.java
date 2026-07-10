@@ -31,6 +31,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(errorResponse);
     }
 
+    @ExceptionHandler
     public ResponseEntity<ErrorResponse> handleBusiness(BusinessException ex) {
         ErrorResponse errorResponse = new ErrorResponse(
                 LocalDate.now(),

@@ -22,6 +22,8 @@ public class PedidoService {
         pedido.setDataPedido(Date.from(Instant.now()));
         pedido.setStatusEnum(StatusEnum.ABERTO);
         Pedido pedidoSalvo = pedidoRepository.save(pedido);
+
+        //Um produto inativo não pode ser adicionado a um pedido.
         return pedidoSalvo.getId();
     }
 

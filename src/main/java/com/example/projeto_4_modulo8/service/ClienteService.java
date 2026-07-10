@@ -1,5 +1,6 @@
 package com.example.projeto_4_modulo8.service;
 
+import com.example.projeto_4_modulo8.config.exception.BusinessException;
 import com.example.projeto_4_modulo8.model.Cliente;
 import com.example.projeto_4_modulo8.model.dto.ClienteRequestDTO;
 import com.example.projeto_4_modulo8.model.dto.ClienteResponseDTO;
@@ -16,6 +17,13 @@ public class ClienteService {
     private ClienteRepository clienteRepository;
 
     public Long saveCliente(ClienteRequestDTO clienteRequest) {
+        if(clienteRequest.getEmail() != null) {
+            Cliente cliente = clienteRepository.findByEmail(clienteRequest.getEmail());
+            if(cliente != null) {
+                throw new BusinessException("E-mail já cadastrado para outro cliente");
+            }
+        }
+
         Cliente cliente = new Cliente(clienteRequest);
         cliente.setAtivo(Boolean.TRUE);
         Cliente clienteSalvo = clienteRepository.save(cliente);
@@ -41,12 +49,19 @@ public class ClienteService {
         return cliente;
     }
 
-    public void updateCliente(Long id, ClienteRequestDTO cliente) {
+    public void updateCliente(Long id, ClienteRequestDTO clienteRequest) {
+        if(clienteRequest.getEmail() != null) {
+            Cliente cliente = clienteRepository.findByEmail(clienteRequest.getEmail());
+            if(cliente != null) {
+                throw new BusinessException("E-mail já cadastrado para outro cliente");
+            }
+        }
+
         Cliente clienteBase = findCliente(id);
 
-        clienteBase.setEmail(cliente.getEmail());
-        clienteBase.setNome(cliente.getNome());
-        clienteBase.setTelefone(cliente.getTelefone());
+        clienteBase.setEmail(clienteRequest.getEmail());
+        clienteBase.setNome(clienteRequest.getNome());
+        clienteBase.setTelefone(clienteRequest.getTelefone());
 
         clienteRepository.save(clienteBase);
     }

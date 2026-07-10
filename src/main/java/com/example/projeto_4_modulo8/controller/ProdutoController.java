@@ -1,6 +1,8 @@
 package com.example.projeto_4_modulo8.controller;
 
 import com.example.projeto_4_modulo8.model.Produto;
+import com.example.projeto_4_modulo8.model.dto.ProdutoRequestDTO;
+import com.example.projeto_4_modulo8.model.dto.ProdutoResponseDTO;
 import com.example.projeto_4_modulo8.service.PedidoService;
 import com.example.projeto_4_modulo8.service.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +20,7 @@ public class ProdutoController {
     private ProdutoService produtoService;
 
     @PostMapping
-    public ResponseEntity<?> cadastrarProduto(@RequestBody Produto produto) {
+    public ResponseEntity<?> cadastrarProduto(@RequestBody ProdutoRequestDTO produto) {
         Long id = produtoService.saveProduto(produto);
 
         URI location = URI.create("/produto/" + id);
@@ -28,21 +30,21 @@ public class ProdutoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Produto>>  buscarTodos() {
-        List<Produto> produtos = produtoService.findAllProdutos();
+    public ResponseEntity<List<ProdutoResponseDTO>>  buscarTodos() {
+        List<ProdutoResponseDTO> produtos = produtoService.findAllProdutos();
 
         return ResponseEntity.ok(produtos);
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Produto>  buscarPorId(@PathVariable Long id) {
-        Produto produto = produtoService.findProduto(id);
+    public ResponseEntity<ProdutoResponseDTO>  buscarPorId(@PathVariable Long id) {
+        ProdutoResponseDTO produtoResponse = produtoService.findProdutoResponse(id);
 
-        return ResponseEntity.ok(produto);
+        return ResponseEntity.ok(produtoResponse);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<?>  atualizarProduto(@PathVariable Long id, @RequestBody Produto produto) {
+    public ResponseEntity<?>  atualizarProduto(@PathVariable Long id, @RequestBody ProdutoRequestDTO produto) {
         produtoService.updateProduto(id, produto);
 
         return ResponseEntity.noContent().build();

@@ -1,5 +1,6 @@
 package com.example.projeto_4_modulo8.model;
 
+import com.example.projeto_4_modulo8.model.dto.ProdutoRequestDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,4 +25,10 @@ public class Produto {
     private Integer quantidadeEstoque;
     private Boolean ativo;
 
+    public Produto(ProdutoRequestDTO produtoRequestDTO) {
+        this.nome = produtoRequestDTO.getNome();
+        this.descricao = produtoRequestDTO.getDescricao();
+        this.preco = produtoRequestDTO.getPreco();
+        this.quantidadeEstoque = produtoRequestDTO.getQuantidadeEstoque();
+    }
 }

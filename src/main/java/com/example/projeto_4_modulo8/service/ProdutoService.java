@@ -1,6 +1,9 @@
 package com.example.projeto_4_modulo8.service;
 
 import com.example.projeto_4_modulo8.model.Produto;
+import com.example.projeto_4_modulo8.model.dto.ClienteResponseDTO;
+import com.example.projeto_4_modulo8.model.dto.ProdutoRequestDTO;
+import com.example.projeto_4_modulo8.model.dto.ProdutoResponseDTO;
 import com.example.projeto_4_modulo8.repository.PedidoRepository;
 import com.example.projeto_4_modulo8.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,14 +17,25 @@ public class ProdutoService {
     @Autowired
     private ProdutoRepository produtoRepository;
 
-    public Long saveProduto(Produto produto) {
+    public Long saveProduto(ProdutoRequestDTO produtoRequestDTO) {
+        Produto produto = new Produto(produtoRequestDTO);
+
         produto.setAtivo(Boolean.TRUE);
-        Produto produtoSalvo = produtoRepository.save(produto);
-        return produtoSalvo.getId();
+        produto = produtoRepository.save(produto);
+        return produto.getId();
     }
 
-    public List<Produto> findAllProdutos() {
-        return produtoRepository.findAll();
+    public List<ProdutoResponseDTO> findAllProdutos() {
+        List<Produto> produtos = produtoRepository.findAll();
+
+        List<ProdutoResponseDTO> produtoResponseDTOList = produtos.stream().map(ProdutoResponseDTO::new).toList();
+
+        return produtoResponseDTOList;
+    }
+
+    public ProdutoResponseDTO findProdutoResponse(Long id) {
+        Produto produto = findProduto(id);
+        return new ProdutoResponseDTO(produto);
     }
 
     public Produto findProduto(Long id) {
@@ -29,14 +43,13 @@ public class ProdutoService {
         return produto;
     }
 
-    public void updateProduto(Long id, Produto produto) {
+    public void updateProduto(Long id, ProdutoRequestDTO produtoRequestDTO) {
         Produto produtoBase = findProduto(id);
 
-        produtoBase.setAtivo(produto.getAtivo());
-        produtoBase.setDescricao(produto.getDescricao());
-        produtoBase.setNome(produto.getNome());
-        produtoBase.setPreco(produto.getPreco());
-        produtoBase.setQuantidadeEstoque(produto.getQuantidadeEstoque());
+        produtoBase.setDescricao(produtoRequestDTO.getDescricao());
+        produtoBase.setNome(produtoRequestDTO.getNome());
+        produtoBase.setPreco(produtoRequestDTO.getPreco());
+        produtoBase.setQuantidadeEstoque(produtoRequestDTO.getQuantidadeEstoque());
 
         produtoRepository.save(produtoBase);
     }
